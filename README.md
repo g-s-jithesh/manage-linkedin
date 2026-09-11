@@ -34,7 +34,7 @@ And Next.js route.ts handles the backend for now
 
 ## Future Scope
 
-1. To be able to log into your LinkedIn via linkedin OAuth.
+1. To be able to log into your LinkedIn via linkedin OAuth. - **COMPLETED ON SEPT 11, 2026**
 
 2. To be able to grab the posts from the LinkedIn url/id, like any other social media.
 
@@ -51,6 +51,11 @@ And Next.js route.ts handles the backend for now
 8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish.
 
 9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people.
+
+
+## Work Done
+
+1. Successfully implemented LinkedIn OAuth login — **COMPLETED ON SEPT 11, 2026**
 
 
 

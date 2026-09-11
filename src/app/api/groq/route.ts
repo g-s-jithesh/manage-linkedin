@@ -43,10 +43,11 @@ export async function POST(req: Request) {
     const result = chatCompletion.choices[0]?.message?.content || "";
 
     return NextResponse.json({ result });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Failed to process request";
     console.error("Groq API Error:", error);
     return NextResponse.json(
-      { error: "Failed to process request", details: error.message },
+      { error: "Failed to process request", details: message },
       { status: 500 }
     );
   }

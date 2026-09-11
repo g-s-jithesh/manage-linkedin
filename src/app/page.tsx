@@ -1,7 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { Copy, Sparkles, Wand2, LayoutDashboard, Settings, UserCircle, PenTool } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Copy, Sparkles, Wand2, LayoutDashboard, Settings, UserCircle, PenTool, LogOut } from "lucide-react";
+
+type SessionUser = {
+  sub?: string;
+  name?: string;
+  givenName?: string;
+  familyName?: string;
+  picture?: string;
+  email?: string;
+  emailVerified?: boolean;
+};
 
 export default function Home() {
   const [idea, setIdea] = useState("");
@@ -10,6 +21,8 @@ export default function Home() {
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loadingFinal, setLoadingFinal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const [sessionLoading, setSessionLoading] = useState(false);
 
   const generateDraft = async () => {
     if (!idea) return;
@@ -51,6 +64,39 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  useEffect(() => {
+    const loadSession = async () => {
+      setSessionLoading(true);
+      try {
+        const response = await fetch("/api/auth/session", { method: "GET" });
+        if (!response.ok) {
+          setUser(null);
+          return;
+        }
+        const data = await response.json();
+        setUser(data.authenticated ? data.user : null);
+      } catch {
+        setUser(null);
+      } finally {
+        setSessionLoading(false);
+      }
+    };
+
+    loadSession();
+  }, []);
+
+  const logout = async () => {
+    setSessionLoading(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setUser(null);
+    } catch {
+      // Non-blocking: logout error remains user-friendly locally.
+    } finally {
+      setSessionLoading(false);
+    }
+  };
+
   return (
     <div className="flex h-screen w-full bg-[#E0E5EC] p-6 gap-6 text-skeuo-text">
       {/* Sidebar */}
@@ -89,9 +135,29 @@ export default function Home() {
       <main className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
         <header className="flex justify-between items-center px-2">
           <h2 className="text-2xl font-bold text-gray-700">Post Creator & Polisher</h2>
-          <div className="skeuo-inset px-4 py-2 flex items-center gap-2 rounded-full text-sm font-medium text-green-700">
-            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div>
-            LinkedIn Synced
+          <div className="flex items-center gap-3">
+            <div className="skeuo-inset px-4 py-2 flex items-center gap-2 rounded-full text-sm font-medium text-green-700">
+              <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></div>
+              {user ? "LinkedIn Connected" : "LinkedIn Disconnected"}
+            </div>
+            {user ? (
+              <button
+                onClick={logout}
+                className="skeuo-button px-4 py-2 gap-2 text-sm font-semibold text-gray-700 disabled:opacity-50"
+                disabled={sessionLoading}
+              >
+                <LogOut size={16} />
+                {sessionLoading ? "Logging out..." : "Logout"}
+              </button>
+            ) : (
+              <a
+                href="/api/auth/linkedin"
+                className="skeuo-button px-4 py-2 gap-2 text-sm font-semibold text-gray-700"
+              >
+                <UserCircle size={16} />
+                Continue with LinkedIn
+              </a>
+            )}
           </div>
         </header>
 
@@ -157,10 +223,18 @@ export default function Home() {
               
               <div className="skeuo-inset flex-1 p-6 flex flex-col gap-4">
                 <div className="flex items-center gap-3 border-b border-gray-300 pb-4">
-                  <div className="w-12 h-12 rounded-full skeuo-panel bg-gray-200"></div>
+                  <div className="w-12 h-12 rounded-full skeuo-panel bg-gray-200 overflow-hidden">
+                    {user?.picture ? (
+                      <Image src={user.picture} alt={user.name || "LinkedIn profile"} width={48} height={48} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <UserCircle size={28} className="text-gray-500" />
+                      </div>
+                    )}
+                  </div>
                   <div>
-                    <h4 className="font-bold text-sm text-gray-800">Your Name</h4>
-                    <p className="text-xs text-gray-500">Your Title • Now</p>
+                    <h4 className="font-bold text-sm text-gray-800">{user?.name || "LinkedIn profile not connected"}</h4>
+                    <p className="text-xs text-gray-500">{user ? "LinkedIn Member • Now" : "LinkedIn disconnected"}</p>
                   </div>
                 </div>
                 <textarea
