@@ -30,13 +30,13 @@ And Next.js route.ts handles the backend for now
 
 ![Screenshot](/public/screenshot_demo.png)
 
-5. Then enter a post you want to post, then it will generate a draft.
+5. Then enter a post you want to post, or paste any LinkedIn post URL / Activity ID to grab and remix an existing post, then it will generate a draft.
 
 ## Future Scope
 
 1. To be able to log into your LinkedIn via linkedin OAuth. - **COMPLETED ON SEPT 11, 2026**
 
-2. To be able to grab the posts from the LinkedIn url/id, like any other social media.
+2. To be able to grab the posts from the LinkedIn url/id, like any other social media. - **COMPLETED ON SEPT 11, 2026**
 
 3. To be able to Attach files to post in the linked in post. Like, video, images, etc.
 
@@ -56,6 +56,8 @@ And Next.js route.ts handles the backend for now
 ## Work Done
 
 1. Successfully implemented LinkedIn OAuth login — **COMPLETED ON SEPT 11, 2026**
+
+2. Successfully implemented LinkedIn post grabber by URL or ID with auto-parsing, OpenGraph/oEmbed extraction, preview, and AI remixing — **COMPLETED ON SEPT 11, 2026**
 
 
 
