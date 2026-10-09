@@ -38,7 +38,7 @@ And Next.js route.ts handles the backend for now
 
 2. To be able to grab the posts from the LinkedIn url/id, like any other social media. - **COMPLETED ON SEPT 11, 2026**
 
-3. To be able to Attach files to post in the linked in post. Like, video, images, etc.
+3. To be able to Attach files to post in the linked in post. Like, video, images, etc. - **COMPLETED ON OCT 9, 2026**
 
 4. Create a Actual Humanizer logic for the posts to not get flagged as AI. *Note: Do not completely rely on Generated AI content, please double check while posting anything Generated Content*
 
@@ -59,5 +59,6 @@ And Next.js route.ts handles the backend for now
 
 2. Successfully implemented LinkedIn post grabber by URL or ID with auto-parsing, OpenGraph/oEmbed extraction, preview, and AI remixing — **COMPLETED ON SEPT 11, 2026**
 
+3. Successfully implemented direct posting to LinkedIn with attachments (up to 9 images or 1 video) via a "Post to LinkedIn" button — **COMPLETED ON OCT 9, 2026**
 
-
+*Note: Posting needs the "Share on LinkedIn" product (`w_member_social`) enabled on your LinkedIn app. Log in again after updating so the session carries the access token.*

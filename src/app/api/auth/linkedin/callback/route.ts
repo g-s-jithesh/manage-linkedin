@@ -97,6 +97,7 @@ export async function GET(request: Request) {
     email: profile.email,
     emailVerified: profile.email_verified,
     connectedAt: Date.now(),
+    accessToken: tokenData.access_token,
   };
 
   const response = NextResponse.redirect(new URL("/", request.url));

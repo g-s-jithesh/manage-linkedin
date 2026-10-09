@@ -12,6 +12,7 @@ export type LinkedInSession = {
   email?: string;
   emailVerified?: boolean;
   connectedAt: number;
+  accessToken?: string;
 };
 
 export function getLinkedInEnv() {

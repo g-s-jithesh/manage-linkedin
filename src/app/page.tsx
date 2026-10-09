@@ -11,12 +11,13 @@ import {
   UserCircle,
   PenTool,
   LogOut,
-  Link as LinkIcon,
   Download,
   ExternalLink,
   AlertCircle,
   CheckCircle2,
-  Share2,
+  Send,
+  Paperclip,
+  X,
   ArrowDownRight,
   RefreshCw,
 } from "lucide-react";
@@ -39,6 +40,9 @@ export default function Home() {
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loadingFinal, setLoadingFinal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [posting, setPosting] = useState(false);
+  const [postStatus, setPostStatus] = useState<string | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [sessionLoading, setSessionLoading] = useState(false);
 
@@ -105,6 +109,25 @@ export default function Home() {
     }
   };
 
+
+  const postToLinkedIn = async () => {
+    setPosting(true);
+    setPostStatus(null);
+    try {
+      const form = new FormData();
+      form.append("text", finalPost);
+      attachments.forEach((f) => form.append("files", f));
+      const res = await fetch("/api/linkedin/share", { method: "POST", body: form });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error);
+      setPostStatus("Posted to LinkedIn!");
+      setAttachments([]);
+    } catch (err) {
+      setPostStatus(err instanceof Error ? err.message : "Failed to post");
+    } finally {
+      setPosting(false);
+    }
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(finalPost);
@@ -580,6 +603,29 @@ export default function Home() {
                   placeholder="Final polished post ready for LinkedIn..."
                   className="w-full flex-1 bg-transparent outline-none resize-none text-gray-800 text-sm leading-relaxed"
                 />
+                <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                  <label className="cursor-pointer flex items-center gap-1 font-semibold text-blue-600">
+                    <Paperclip size={14} /> Attach images / video
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*,video/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        setAttachments((prev) => [...prev, ...Array.from(e.target.files ?? [])]);
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                  {attachments.map((f, i) => (
+                    <span key={i} className="flex items-center gap-1 bg-gray-200 rounded px-2 py-1">
+                      {f.name}
+                      <button onClick={() => setAttachments(attachments.filter((_, j) => j !== i))} aria-label="Remove attachment">
+                        <X size={12} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <button
@@ -590,6 +636,15 @@ export default function Home() {
                 <Copy size={24} />
                 {copied ? "Copied!" : "Copy to Clipboard"}
               </button>
+              <button
+                onClick={postToLinkedIn}
+                disabled={!user || posting || (!finalPost && !attachments.length)}
+                className="skeuo-button w-full py-4 text-lg font-bold text-blue-600 gap-2 disabled:opacity-50"
+              >
+                <Send size={24} />
+                {posting ? "Posting..." : "Post to LinkedIn"}
+              </button>
+              {postStatus && <p className="text-xs text-gray-600 text-center">{postStatus}</p>}
             </section>
           </div>
         </div>
