@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   if (!Number.isFinite(at) || at <= Date.now()) return err("Pick a time in the future.");
   if (at - Date.now() > MAX_DELAY_MS) return err("Schedule at most 24 days ahead.");
 
-  const id = schedulePost(session.sub, session.accessToken, text, files, at);
+  const id = await schedulePost(session.sub, session.accessToken, text, files, at);
   return NextResponse.json({ success: true, id });
 }
 

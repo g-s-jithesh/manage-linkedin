@@ -46,6 +46,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [posting, setPosting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [postStatus, setPostStatus] = useState<string | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [sessionLoading, setSessionLoading] = useState(false);
@@ -61,6 +62,7 @@ export default function Home() {
   const generateDraft = async () => {
     if (!idea) return;
     setLoadingDraft(true);
+    setErrorMsg(null);
     try {
       const response = await fetch("/api/groq", {
         method: "POST",
@@ -80,7 +82,7 @@ export default function Home() {
       setDraft(data.result);
     } catch (error) {
       console.error("generateDraft error:", error);
-      alert(error instanceof Error ? error.message : "Request failed");
+      setErrorMsg(error instanceof Error ? error.message : "Request failed");
     } finally {
       setLoadingDraft(false);
     }
@@ -90,6 +92,7 @@ export default function Home() {
   const humanizeDraft = async () => {
     if (!draft) return;
     setLoadingFinal(true);
+    setErrorMsg(null);
     try {
       const response = await fetch("/api/groq", {
         method: "POST",
@@ -109,7 +112,7 @@ export default function Home() {
       setFinalPost(data.result);
     } catch (error) {
       console.error("humanizeDraft error:", error);
-      alert(error instanceof Error ? error.message : "Request failed");
+      setErrorMsg(error instanceof Error ? error.message : "Request failed");
     } finally {
       setLoadingFinal(false);
     }
@@ -273,6 +276,12 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
+        {errorMsg && (
+          <div role="alert" className="flex items-center gap-2 rounded bg-red-100 text-red-700 text-sm px-4 py-3">
+            <AlertCircle size={16} /> <span className="flex-1">{errorMsg}</span>
+            <button onClick={() => setErrorMsg(null)} aria-label="Dismiss error"><X size={14} /></button>
+          </div>
+        )}
         <header className="flex justify-between items-center px-2">
           <div>
             <h2 className="text-2xl font-bold text-gray-700">Post Creator & Polisher</h2>

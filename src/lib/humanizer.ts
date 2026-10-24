@@ -12,3 +12,13 @@ export const isVariant = (v: unknown): v is HumanizerVariant =>
 const RULES = `Also: never open with "In today's fast-paced world" or similar; no em dashes (use commas or periods); max 3 hashtags, only at the end; avoid "game-changer", "unlock", "journey", "leverage"; mix very short and longer sentences.`;
 
 export const variantPrompt = (v: HumanizerVariant) => `\n      Style variant - ${HUMANIZER_VARIANTS[v]}\n      ${RULES}`;
+
+// Enforces the rules the model tends to ignore: no em dashes, at most 3 hashtags.
+export function cleanHumanized(text: string) {
+  let tags = 0;
+  return text
+    .replace(/\s*—\s*/g, ", ")
+    .replace(/#\w+/g, (t) => (++tags > 3 ? "" : t))
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+}

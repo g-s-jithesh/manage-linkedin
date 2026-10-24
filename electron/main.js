@@ -2,6 +2,7 @@ const { app, BrowserWindow, shell, dialog } = require("electron");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 const PORT = 3000; // must match LINKEDIN_REDIRECT_URI (http://localhost:3000/api/auth/linkedin/callback)
 let server;
@@ -33,7 +34,7 @@ function startServer() {
   const dir = path.join(process.resourcesPath, "app-server");
   server = spawn(process.execPath, [path.join(dir, "server.js")], {
     cwd: dir,
-    env: { ...process.env, ...loadEnv(), ELECTRON_RUN_AS_NODE: "1", PORT: String(PORT), HOSTNAME: "localhost", NODE_ENV: "production" },
+    env: { ...process.env, ...loadEnv(), DATA_DIR: app.getPath("userData"), ELECTRON_RUN_AS_NODE: "1", PORT: String(PORT), HOSTNAME: "localhost", NODE_ENV: "production" },
     stdio: "ignore",
   });
 }
@@ -44,9 +45,18 @@ async function waitForServer() {
   }
 }
 
+const portInUse = () => fetch(`http://localhost:${PORT}`).then(() => true, () => false);
+
 app.whenReady().then(async () => {
+  if (app.isPackaged && (await portInUse())) {
+    dialog.showErrorBox("Port 3000 is busy", "Close whatever is using port 3000 (another dev server?) and start the app again.");
+    return app.quit();
+  }
   startServer();
   await waitForServer();
+  // Route modules load lazily; touch the schedule API so saved scheduled posts are re-armed right away.
+  fetch(`http://localhost:${PORT}/api/linkedin/schedule`).catch(() => {});
+  if (app.isPackaged) autoUpdater.checkForUpdatesAndNotify().catch(() => {});
   const win = new BrowserWindow({ width: 1280, height: 860, autoHideMenuBar: true, icon: path.join(__dirname, "../build/icon.png") });
   // Keep the app and the LinkedIn login on localhost / linkedin.com inside; everything else opens in the browser.
   win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: "deny" }; });

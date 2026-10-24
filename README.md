@@ -44,13 +44,13 @@ And Next.js route.ts handles the backend for now
 
 5. Add three different variants of the humanizer - **COMPLETED ON OCT 24, 2026**
 
-6. Directly post and tracking Analytics from the tool. - **PARTIAL (Oct 24, 2026): posting + local post history; like/comment stats depend on LinkedIn granting API access**
+6. Directly post and tracking Analytics from the tool. - **PARTIAL (Oct 24, 2026): posting + local post history done; like/comment stats depend on LinkedIn granting API access**
 
-7. Add schedule timer to post (Optional not confirmed) - **STARTED (Oct 25, 2026): pick a time and Schedule; posts are held in memory, so the app must stay open until then**
+7. Add schedule timer to post (Optional not confirmed) - **COMPLETED ON OCT 25, 2026**
 
 8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish. - **COMPLETED ON OCT 24, 2026**
 
-9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people. - **STARTED (Oct 24, 2026): Windows installer builds with `npm run desktop`; see Desktop app below**
+9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people. - **COMPLETED ON OCT 25, 2026** (unsigned; code signing pending)
 
 
 ## Work Done
@@ -65,6 +65,6 @@ And Next.js route.ts handles the backend for now
 
 ## Desktop app (Windows)
 
-**[Download the latest installer](https://github.com/g-s-jithesh/manage-linkedin/releases/latest)** (`Manage-LinkedIn-Setup-0.1.0.exe`). Windows SmartScreen may warn because it's unsigned: More info > Run anyway.
+**[Download the latest installer](https://github.com/g-s-jithesh/manage-linkedin/releases/latest)**. Windows SmartScreen may warn because it's unsigned: More info > Run anyway.
 
-To build it yourself: `npm run desktop` builds `dist/Manage LinkedIn Setup 0.1.0.exe` (Electron wrapping the Next.js standalone server). On first launch it creates `%APPDATA%\manage-linkedin\.env` and opens it: fill in `GROQ_API_KEY` and the `LINKEDIN_*` values, then restart. Port 3000 must be free (it matches the LinkedIn redirect URI). Unsigned, with a placeholder icon.
+To build it yourself: `npm run desktop` builds `dist/Manage-LinkedIn-Setup-<version>.exe` (Electron wrapping the Next.js standalone server). On first launch it creates `%APPDATA%\manage-linkedin\.env` and opens it: fill in `GROQ_API_KEY` and the `LINKEDIN_*` values, then restart. Port 3000 must be free (it matches the LinkedIn redirect URI). The app checks GitHub releases for updates on startup. Scheduled posts are saved in the same folder and re-armed on launch (posts missed while the app was closed are marked failed, not posted late). Unsigned, with a placeholder icon.

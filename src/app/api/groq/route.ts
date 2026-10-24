@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
-import { isVariant, variantPrompt } from "@/lib/humanizer";
+import { cleanHumanized, isVariant, variantPrompt } from "@/lib/humanizer";
 import { rateLimit } from "@/lib/rate-limit";
 
 // Initialize the Groq client. It will automatically use process.env.GROQ_API_KEY
@@ -51,7 +51,8 @@ export async function POST(req: Request) {
       max_tokens: 1024,
     });
 
-    const result = chatCompletion.choices[0]?.message?.content || "";
+    const raw = chatCompletion.choices[0]?.message?.content || "";
+    const result = action === "humanize" ? cleanHumanized(raw) : raw;
 
     return NextResponse.json({ result });
   } catch (error: unknown) {
