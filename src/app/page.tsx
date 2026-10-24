@@ -22,6 +22,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import type { GrabbedLinkedInPost } from "@/lib/linkedin-post-grabber";
+import { HUMANIZER_VARIANTS, type HumanizerVariant } from "@/lib/humanizer";
 
 type SessionUser = {
   sub?: string;
@@ -39,6 +40,7 @@ export default function Home() {
   const [finalPost, setFinalPost] = useState("");
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loadingFinal, setLoadingFinal] = useState(false);
+  const [variant, setVariant] = useState<HumanizerVariant>("casual");
   const [copied, setCopied] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [posting, setPosting] = useState(false);
@@ -89,7 +91,7 @@ export default function Home() {
       const response = await fetch("/api/groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "humanize", text: draft }),
+        body: JSON.stringify({ action: "humanize", text: draft, variant }),
       });
       if (!response.ok) {
         const errText = await response.text();
@@ -552,6 +554,16 @@ export default function Home() {
                   Contrarian Hook
                 </button>
               </div>
+              <select
+                value={variant}
+                onChange={(e) => setVariant(e.target.value as HumanizerVariant)}
+                className="skeuo-inset w-full px-3 py-2 text-sm text-gray-700 rounded"
+                aria-label="Humanizer variant"
+              >
+                {(Object.keys(HUMANIZER_VARIANTS) as HumanizerVariant[]).map((v) => (
+                  <option key={v} value={v}>{v[0].toUpperCase() + v.slice(1)}</option>
+                ))}
+              </select>
               <button
                 onClick={humanizeDraft}
                 disabled={loadingFinal || !draft}

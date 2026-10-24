@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
+import { isVariant, variantPrompt } from "@/lib/humanizer";
 
 // Initialize the Groq client. It will automatically use process.env.GROQ_API_KEY
 const groq = new Groq();
 
 export async function POST(req: Request) {
   try {
-    const { action, text } = await req.json();
+    const { action, text, variant } =await req.json();
 
     if (!text) {
       return NextResponse.json({ error: "Text is required" }, { status: 400 });
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
       4. Make the tone confident but vulnerable or relatable.
       5. Add 1-2 relevant emojis, but do not overdo it.
       6. Output ONLY the final post text, nothing else.`;
+      if (isVariant(variant)) systemPrompt += variantPrompt(variant);
     } else {
       return NextResponse.json({ error: "Invalid action" }, { status: 400 });
     }
