@@ -65,4 +65,6 @@ And Next.js route.ts handles the backend for now
 
 ## Desktop app (Windows)
 
-`npm run desktop` builds `dist/Manage LinkedIn Setup 0.1.0.exe` (Electron wrapping the Next.js standalone server). On first launch it creates `%APPDATA%\manage-linkedin\.env` and opens it: fill in `GROQ_API_KEY` and the `LINKEDIN_*` values, then restart. Port 3000 must be free (it matches the LinkedIn redirect URI). Unsigned and default icon for now.
+**[Download the latest installer](https://github.com/g-s-jithesh/manage-linkedin/releases/latest)** (`Manage-LinkedIn-Setup-0.1.0.exe`). Windows SmartScreen may warn because it's unsigned: More info > Run anyway.
+
+To build it yourself: `npm run desktop` builds `dist/Manage LinkedIn Setup 0.1.0.exe` (Electron wrapping the Next.js standalone server). On first launch it creates `%APPDATA%\manage-linkedin\.env` and opens it: fill in `GROQ_API_KEY` and the `LINKEDIN_*` values, then restart. Port 3000 must be free (it matches the LinkedIn redirect URI). Unsigned and default icon for now.
