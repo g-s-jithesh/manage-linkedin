@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import PostHistory, { savePost } from "./PostHistory";
 import {
   Copy,
   Sparkles,
@@ -120,6 +121,7 @@ export default function Home() {
       const res = await fetch("/api/linkedin/share", { method: "POST", body: form });
       const data = await res.json();
       if (!data.success) throw new Error(data.error);
+      savePost(data.id, finalPost, attachments.length);
       setPostStatus("Posted to LinkedIn!");
       setAttachments([]);
     } catch (err) {
@@ -645,6 +647,7 @@ export default function Home() {
                 {posting ? "Posting..." : "Post to LinkedIn"}
               </button>
               {postStatus && <p className="text-xs text-gray-600 text-center">{postStatus}</p>}
+              <PostHistory />
             </section>
           </div>
         </div>
