@@ -64,8 +64,8 @@ export default function Home() {
         body: JSON.stringify({ action: "draft", text: idea }),
       });
       if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText || `Groq API returned ${response.status}`);
+        const errBody = await response.json().catch(() => null);
+        throw new Error(errBody?.error || `Groq API returned ${response.status}`);
       }
       let data;
       try {
@@ -76,6 +76,7 @@ export default function Home() {
       setDraft(data.result);
     } catch (error) {
       console.error("generateDraft error:", error);
+      alert(error instanceof Error ? error.message : "Request failed");
     } finally {
       setLoadingDraft(false);
     }
@@ -92,8 +93,8 @@ export default function Home() {
         body: JSON.stringify({ action: "humanize", text: draft }),
       });
       if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText || `Groq API returned ${response.status}`);
+        const errBody = await response.json().catch(() => null);
+        throw new Error(errBody?.error || `Groq API returned ${response.status}`);
       }
       let data;
       try {
@@ -104,6 +105,7 @@ export default function Home() {
       setFinalPost(data.result);
     } catch (error) {
       console.error("humanizeDraft error:", error);
+      alert(error instanceof Error ? error.message : "Request failed");
     } finally {
       setLoadingFinal(false);
     }
