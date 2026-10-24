@@ -40,15 +40,15 @@ And Next.js route.ts handles the backend for now
 
 3. To be able to Attach files to post in the linked in post. Like, video, images, etc. - **COMPLETED ON OCT 9, 2026**
 
-4. Create a Actual Humanizer logic for the posts to not get flagged as AI. *Note: Do not completely rely on Generated AI content, please double check while posting anything Generated Content*
+4. Create a Actual Humanizer logic for the posts to not get flagged as AI. *Note: Do not completely rely on Generated AI content, please double check while posting anything Generated Content* - **COMPLETED ON OCT 24, 2026**
 
-5. Add three different variants of the humanizer
+5. Add three different variants of the humanizer - **COMPLETED ON OCT 24, 2026**
 
-6. Directly post and tracking Analytics from the tool.
+6. Directly post and tracking Analytics from the tool. - **PARTIAL (Oct 24, 2026): posting + local post history; like/comment stats depend on LinkedIn granting API access**
 
 7. Add schedule timer to post (Optional not confirmed)
 
-8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish.
+8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish. - **COMPLETED ON OCT 24, 2026**
 
 9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people.
 
