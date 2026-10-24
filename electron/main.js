@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, shell, dialog } = require("electron");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
@@ -12,6 +12,12 @@ function loadEnv() {
   if (!fs.existsSync(file)) {
     const tpl = path.join(process.resourcesPath, ".env.example");
     fs.writeFileSync(file, fs.existsSync(tpl) ? fs.readFileSync(tpl) : "GROQ_API_KEY=\n");
+    dialog.showMessageBoxSync({
+      type: "info",
+      title: "First-time setup",
+      message: "Add your keys to finish setup",
+      detail: "A settings file will open next. Fill in GROQ_API_KEY and the LINKEDIN_* values, save it, then restart the app.",
+    });
     shell.openPath(file);
   }
   const env = {};
@@ -41,7 +47,7 @@ async function waitForServer() {
 app.whenReady().then(async () => {
   startServer();
   await waitForServer();
-  const win = new BrowserWindow({ width: 1280, height: 860, autoHideMenuBar: true });
+  const win = new BrowserWindow({ width: 1280, height: 860, autoHideMenuBar: true, icon: path.join(__dirname, "../build/icon.png") });
   // Keep the app and the LinkedIn login on localhost / linkedin.com inside; everything else opens in the browser.
   win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: "deny" }; });
   win.loadURL(`http://localhost:${PORT}`);
