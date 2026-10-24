@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import { isVariant, variantPrompt } from "@/lib/humanizer";
+import { rateLimit } from "@/lib/rate-limit";
 
 // Initialize the Groq client. It will automatically use process.env.GROQ_API_KEY
 const groq = new Groq();
 
 export async function POST(req: Request) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "local";
+  const rl = rateLimit(ip, Number(process.env.GROQ_RATE_LIMIT_PER_MIN) || 10);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: `Rate limit reached. Please try again in ${rl.retryAfter}s.` },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } }
+    );
+  }
   try {
     const { action, text, variant } =await req.json();
 
