@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import SchedulePost from "./SchedulePost";
 import PostHistory, { savePost } from "./PostHistory";
 import {
   Copy,
@@ -661,6 +662,7 @@ export default function Home() {
                 {posting ? "Posting..." : "Post to LinkedIn"}
               </button>
               {postStatus && <p className="text-xs text-gray-600 text-center">{postStatus}</p>}
+              <SchedulePost text={finalPost} files={attachments} enabled={!!user} onScheduled={() => setAttachments([])} />
               <PostHistory />
             </section>
           </div>

@@ -46,7 +46,7 @@ And Next.js route.ts handles the backend for now
 
 6. Directly post and tracking Analytics from the tool. - **PARTIAL (Oct 24, 2026): posting + local post history; like/comment stats depend on LinkedIn granting API access**
 
-7. Add schedule timer to post (Optional not confirmed)
+7. Add schedule timer to post (Optional not confirmed) - **STARTED (Oct 25, 2026): pick a time and Schedule; posts are held in memory, so the app must stay open until then**
 
 8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish. - **COMPLETED ON OCT 24, 2026**
 
