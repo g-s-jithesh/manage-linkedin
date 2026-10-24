@@ -41,3 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+Interview-QA-Manage-LinkedIn.pdf
+dist/

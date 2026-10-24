@@ -50,7 +50,7 @@ And Next.js route.ts handles the backend for now
 
 8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish. - **COMPLETED ON OCT 24, 2026**
 
-9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people.
+9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people. - **STARTED (Oct 24, 2026): Windows installer builds with `npm run desktop`; see Desktop app below**
 
 
 ## Work Done
@@ -62,3 +62,7 @@ And Next.js route.ts handles the backend for now
 3. Successfully implemented direct posting to LinkedIn with attachments (up to 9 images or 1 video) via a "Post to LinkedIn" button — **COMPLETED ON OCT 9, 2026**
 
 *Note: Posting needs the "Share on LinkedIn" product (`w_member_social`) enabled on your LinkedIn app. Log in again after updating so the session carries the access token.*
+
+## Desktop app (Windows)
+
+`npm run desktop` builds `dist/Manage LinkedIn Setup 0.1.0.exe` (Electron wrapping the Next.js standalone server). On first launch it creates `%APPDATA%\manage-linkedin\.env` and opens it: fill in `GROQ_API_KEY` and the `LINKEDIN_*` values, then restart. Port 3000 must be free (it matches the LinkedIn redirect URI). Unsigned and default icon for now.
