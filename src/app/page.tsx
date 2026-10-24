@@ -276,6 +276,15 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2">
+        {process.env.NEXT_PUBLIC_DEMO === "1" && (
+          <div className="rounded bg-yellow-100 text-yellow-800 text-sm px-4 py-3">
+            Static demo of the UI. Drafting, login and posting need the server, so download the{" "}
+            <a className="underline font-semibold" href="https://github.com/g-s-jithesh/manage-linkedin/releases/latest">
+              Windows app
+            </a>{" "}
+            to use them.
+          </div>
+        )}
         {errorMsg && (
           <div role="alert" className="flex items-center gap-2 rounded bg-red-100 text-red-700 text-sm px-4 py-3">
             <AlertCircle size={16} /> <span className="flex-1">{errorMsg}</span>
